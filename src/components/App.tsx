@@ -17,16 +17,32 @@ export class App extends React.Component<{}, Istate> {
       currentTask: "",
       tasks: [
         ...this.state.tasks,
-        this.state.currentTask
+        {
+          id: this._generateId(),
+          value: this.state.currentTask,
+          completed: false
+        }
       ]
     });
   }
 
+  public toggleDone(index: number): void {
+    let task : Itask[] = this.state.tasks.splice(index, 1);
+    task[0].completed = !task[0].completed;
+
+    // console.log('task', task);
+    const currentTasks : Itask[] = [...this.state.tasks, ...task];
+
+    this.setState({tasks: currentTasks});
+  }
+
   renderTasks(): JSX.Element[] {
-    return this.state.tasks.map((task: string, index: number) => {
+    return this.state.tasks.map((task: Itask, index: number) => {
       return (
-        <div key={index}>
-          {task}
+        <div key={task.id} className="tdl-task">
+          <span className={task.completed ? "is-completed" : " "}>{task.value}</span>
+          <button onClick={() => this.deleteTask(task.id)}>Delete task</button>
+          <button onClick={() => this.toggleDone(index)}>{task.completed ? 'Undo': 'Done'}</button>
         </div>
       );
     });
@@ -38,7 +54,7 @@ export class App extends React.Component<{}, Istate> {
       <div>
         <h1>React Typescript Todo List</h1>
         <form onSubmit={(e)=> this.handleSubmit(e)}>
-          <input type="text" placeholder="Add a task" onChange={e => {this.setState({currentTask: e.target.value})}}
+          <input className="tdl-input" type="text" placeholder="Add a task" onChange={e => {this.setState({currentTask: e.target.value})}}
           value={this.state.currentTask} 
           />
           <button type="submit">Add Task</button>
@@ -49,6 +65,17 @@ export class App extends React.Component<{}, Istate> {
       </div>
     )
   }
+
+  private _generateId(): number {
+    return Date.now();
+  }
+
+  private deleteTask(id: number): void {
+    const filteredTask: Array<Itask>  = this.state.tasks.filter((task: Itask) => task.id !== id);
+
+    this.setState({tasks: filteredTask});
+  }
+
 }
 
 // interface IProps {
@@ -56,6 +83,12 @@ export class App extends React.Component<{}, Istate> {
 // }
 
 interface Istate {
-  tasks: Array<any>,
+  tasks: Array<Itask>,
   currentTask: string
+}
+
+interface Itask {
+  id: number,
+  value: string,
+  completed: boolean,
 }
