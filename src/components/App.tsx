@@ -52,7 +52,7 @@ export class App extends React.Component<{}, Istate> {
     // console.log(this.state);
     return (
       <div>
-        <h1>React Typescript Todo List</h1>
+        {/* <h1>React Typescript Todo List</h1>
         <form onSubmit={(e)=> this.handleSubmit(e)}>
           <input className="tdl-input" type="text" placeholder="Add a task" onChange={e => {this.setState({currentTask: e.target.value})}}
           value={this.state.currentTask} 
@@ -61,7 +61,16 @@ export class App extends React.Component<{}, Istate> {
         </form>
         <section>
           {this.renderTasks()}
-        </section>
+        </section> */}
+        <div className="div-opacity">
+        </div>
+        <div className="home-container">
+          <div className="details-wrap">
+            <h1>REACT TODO APP</h1>
+            <p>A simple todo app, simply register to place your todo and manage them</p>
+            <button>Create Todo</button>
+          </div>
+        </div>
       </div>
     )
   }
